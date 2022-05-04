@@ -115,6 +115,10 @@ const Index = () => {
 						<ol>
 							<li>Enter your wallet address below</li>
 							<li>Click View Reflections</li>
+							<li>
+								Information is pulled from Etherscan and is not
+								stored or saved.
+							</li>
 						</ol>
 					</div>
 					<TextField

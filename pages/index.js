@@ -8,9 +8,9 @@ import LinearProgress from '@mui/material/LinearProgress'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 
 import axios from 'axios'
-import { DateTime } from 'luxon'
 
 import Totals from '../src/components/Totals/Totals'
+import Txns from '../src/components/Txns/Txns'
 import ViewSource from '../src/components/ViewSource/ViewSource'
 import styles from '../styles/index.module.scss'
 
@@ -70,9 +70,11 @@ const Index = () => {
 
 		TXNS.data.result.forEach(e => {
 			total = total + parseInt(e.value)
+			console.log(e)
 			let obj = {
 				timestamp: e.timeStamp,
 				amount: e.value,
+				hash: e.hash,
 			}
 			txs.push(obj)
 		})
@@ -182,28 +184,13 @@ const Index = () => {
 								<div className={styles.header}>
 									TOKEN AMOUNT
 								</div>
+								<div className={styles.header}>TXN</div>
 							</>
 						)}
 						{TXS &&
-							TXS.map(e => {
-								const myDateTime = DateTime.fromSeconds(
-									parseInt(e.timestamp)
-								)
-								return (
-									<>
-										<div>
-											{myDateTime.toLocaleString(
-												DateTime.DATETIME_SHORT
-											)}
-										</div>
-										<div>
-											{(
-												e.amount / DIVISOR
-											).toLocaleString()}
-										</div>
-									</>
-								)
-							})}
+							TXS.map(e => (
+								<Txns key={e.hash} obj={e} divisor={DIVISOR} />
+							))}
 					</div>
 				</div>
 			</div>

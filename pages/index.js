@@ -188,7 +188,9 @@ const Index = () => {
 							</>
 						)}
 						{TXS &&
-							TXS.map(e => <Txns obj={e} divisor={DIVISOR} />)}
+							TXS.map(e => (
+								<Txns key={e.hash} obj={e} divisor={DIVISOR} />
+							))}
 					</div>
 				</div>
 			</div>

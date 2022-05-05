@@ -72,7 +72,7 @@ div.content {
 }
 .txns {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 150px;
 	justify-self: center;
 	width: 100%;
 	padding-bottom: 128px;
@@ -80,6 +80,7 @@ div.content {
 	.header {
 		background-color: rgba(255, 255, 255, 0.5);
 		color: #772a54;
+		text-align: center;
 	}
 
 	div {

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import Head from 'next/head'
 import Image from 'next/image'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import LinearProgress from '@mui/material/LinearProgress'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 import axios from 'axios'
 
@@ -15,6 +16,9 @@ import ViewSource from '../src/components/ViewSource/ViewSource'
 import styles from '../styles/index.module.scss'
 
 const Index = () => {
+	const theme = useTheme()
+	const matches = useMediaQuery(theme.breakpoints.up('sm'))
+
 	const DIVISOR = 1000000000
 
 	const [ADDRESS, setAddress] = useState('')
@@ -69,12 +73,18 @@ const Index = () => {
 		let txs = []
 
 		TXNS.data.result.forEach(e => {
-			total = total + parseInt(e.value)
-			console.log(e)
+			total =
+				ADDRESS.toLowerCase() === e.to
+					? total + parseInt(e.value)
+					: total - parseInt(e.value)
+
+			let type = ADDRESS.toLowerCase() === e.to ? 'in' : 'out'
+
 			let obj = {
 				timestamp: e.timeStamp,
 				amount: e.value,
 				hash: e.hash,
+				type: type,
 			}
 			txs.push(obj)
 		})
@@ -83,7 +93,7 @@ const Index = () => {
 		total = total / DIVISOR
 		let purchase = BALANCE.data.result / DIVISOR
 
-		setTxs(txs)
+		setTxs(txs.reverse())
 		setPurchase(total)
 		setReflections(purchase - total)
 		setTotal(purchase)
@@ -184,12 +194,19 @@ const Index = () => {
 								<div className={styles.header}>
 									TOKEN AMOUNT
 								</div>
-								<div className={styles.header}>TXN</div>
+								{matches && (
+									<div className={styles.header}>TXN</div>
+								)}
 							</>
 						)}
 						{TXS &&
 							TXS.map(e => (
-								<Txns key={e.hash} obj={e} divisor={DIVISOR} />
+								<Txns
+									key={e.hash}
+									obj={e}
+									type={e.type}
+									divisor={DIVISOR}
+								/>
 							))}
 					</div>
 				</div>

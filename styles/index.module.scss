@@ -72,7 +72,7 @@ div.content {
 }
 .txns {
 	display: grid;
-	grid-template-columns: minmax(150px, auto) 1fr minmax(150px, auto);
+	grid-template-columns: minmax(48px, auto) 1fr;
 	justify-self: center;
 	width: 100%;
 	padding-bottom: 128px;
@@ -86,6 +86,18 @@ div.content {
 	div {
 		padding: 8px 16px;
 		border: 1px solid rgba(255, 255, 255, 0.5);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
+
+@media only screen and (min-width: $sm) {
+	.txns {
+		display: grid;
+		grid-template-columns: minmax(48px, auto) 1fr minmax(150px, auto);
+		justify-self: center;
+		width: 100%;
 	}
 }
 

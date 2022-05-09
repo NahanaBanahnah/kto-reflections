@@ -1,3 +1,10 @@
+.date {
+	font-size: 0.8rem;
+}
 .number {
-	text-align: right;
+	justify-content: flex-end !important;
+	color: #d79162;
+}
+.out {
+	color: rgba(#ff9494, 0.5);
 }

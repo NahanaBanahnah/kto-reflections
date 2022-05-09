@@ -72,7 +72,7 @@ div.content {
 }
 .txns {
 	display: grid;
-	grid-template-columns: 1fr 1fr 150px;
+	grid-template-columns: minmax(150px, auto) 1fr minmax(150px, auto);
 	justify-self: center;
 	width: 100%;
 	padding-bottom: 128px;

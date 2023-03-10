@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { styled, useTheme } from '@mui/material/styles'
 import Head from 'next/head'
 import Image from 'next/image'
+
+import React, { useEffect, useState } from 'react'
+import { styled, useTheme } from '@mui/material/styles'
+import { LoadingButton } from '@mui/lab'
+
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import LinearProgress from '@mui/material/LinearProgress'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import useMediaQuery from '@mui/material/useMediaQuery'
-
 import axios from 'axios'
-
+import { Controller, useForm } from 'react-hook-form'
 import logo from '../public/img/storkLogo.svg'
 import Txns from '../src/components/Txns/Txns'
 import ViewSource from '../src/components/ViewSource/ViewSource'
 import styles from '../styles/index.module.scss'
 import {
+	AppBar,
 	Divider,
 	Grid,
 	Table,
@@ -28,27 +31,34 @@ import {
 import { Box, Container, Stack } from '@mui/system'
 
 const Index = () => {
-	const theme = useTheme()
-	const matches = useMediaQuery(theme.breakpoints.up('sm'))
-
 	const DIVISOR = 1000000000
 
 	const [address, setAddress] = useState(null)
 	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState(false)
+	// const [error, setError] = useState(false)
 	const [balance, setBalance] = useState(false)
 	const [ins, setIns] = useState(false)
 	const [outs, setOuts] = useState(false)
-	const [totalPurchase, setPurchase] = useState(false)
 	const [reflections, setReflections] = useState(false)
 	const [TXS, setTxs] = useState(null)
 
-	const SUBMIT = async () => {
+	const {
+		handleSubmit,
+		control,
+		reset,
+		setError,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
+			wallet: '',
+		},
+	})
+
+	const onSubmit = async ({ wallet }) => {
 		// ========== reset states on submit
 		setLoading(true)
-		setError(false)
+		// setError(false)
 		setBalance('')
-		setPurchase('')
 		setReflections('')
 		setTxs(null)
 
@@ -58,7 +68,7 @@ const Index = () => {
 				module: 'account',
 				action: 'tokenBalance',
 				contractaddress: process.env.NEXT_PUBLIC_CONTRACT,
-				address: address,
+				address: wallet,
 				tag: 'latest',
 				apiKey: process.env.NEXT_PUBLIC_API,
 			},
@@ -77,7 +87,7 @@ const Index = () => {
 				module: 'account',
 				action: 'tokentx',
 				contractaddress: process.env.NEXT_PUBLIC_CONTRACT,
-				address: address,
+				address: wallet,
 				apikey: process.env.NEXT_PUBLIC_API,
 			},
 		})
@@ -90,11 +100,11 @@ const Index = () => {
 
 		TXNS.data.result.forEach(e => {
 			total =
-				address.toLowerCase() === e.to
+				wallet.toLowerCase() === e.to
 					? total + parseInt(e.value)
 					: total - parseInt(e.value)
 
-			let type = address.toLowerCase() === e.to ? 'in' : 'out'
+			let type = wallet.toLowerCase() === e.to ? 'in' : 'out'
 
 			if (type === 'in') {
 				totalIn = totalIn + parseInt(e.value)
@@ -121,7 +131,6 @@ const Index = () => {
 		setTxs(txs.reverse())
 		setIns(totalIn)
 		setOuts(totalOut)
-		setPurchase(totalIn / DIVISOR)
 		setReflections(balance + totalOut - totalIn)
 		setBalance(balance)
 		setLoading(false)
@@ -139,6 +148,14 @@ const Index = () => {
 				<title>KTO Reflections</title>
 			</Head>
 			<ViewSource />
+
+			<Box className="topBar" sx={{ padding: 4 }}>
+				<Typography variant="body1">
+					There is a currently a bug showing certain wallets a
+					negative value. This is just a visual bug, you still have
+					your reflections!
+				</Typography>
+			</Box>
 			<Container fixed>
 				<Stack mt={4} spacing={2}>
 					<Box display="flex" justifyContent="center">
@@ -163,31 +180,54 @@ const Index = () => {
 							</li>
 						</ol>
 					</div>
-					<TextField
-						fullWidth
-						label="Your Wallet Address"
-						id="address"
-						placeholder="0x123456..."
-						color="primary"
-						className={styles.input}
-						value={address}
-						onChange={e => setAddress(e.target.value)}
+					<Controller
+						name="wallet"
+						rules={{
+							required: 'Wallet Address Is Required',
+							pattern: {
+								value: /^0x[a-fA-F0-9]{40}$/g,
+								message:
+									'Please Enter A Valid ERC-20 Wallet Address',
+							},
+						}}
+						control={control}
+						render={({
+							field: { onChange, ...field },
+							fieldState: { error },
+						}) => (
+							<TextField
+								{...field}
+								required
+								onChange={onChange}
+								error={error}
+								label={
+									error
+										? error.message
+										: 'ERC-20 Wallet Address'
+								}
+								fullWidth
+								color="white"
+							/>
+						)}
 					/>
 					<Box>
-						<Button
+						<LoadingButton
+							onClick={handleSubmit(onSubmit)}
+							loading={false}
+							color="primary"
 							variant="contained"
-							className={styles.button}
-							onClick={() => SUBMIT()}
+							disableElevation
+							disabled={Object.keys(errors).length !== 0}
 						>
 							View Reflections
-						</Button>
+						</LoadingButton>
 					</Box>
 
 					<Box>
 						{loading && (
 							<BorderLinearProgress color="white" height={10} />
 						)}
-						{error && <h4>{error}</h4>}
+						{/* {error && <h4>{error}</h4>} */}
 					</Box>
 					<Grid
 						container
@@ -249,7 +289,7 @@ const Index = () => {
 								sm: 'left',
 							}}
 						>
-							Total Sells & Transfer Ins
+							Total Sells & Transfer Outs
 						</Grid>
 						<Grid
 							item

@@ -14,13 +14,16 @@
     "@fontsource/roboto": "^4.5.5",
     "@moralisweb3/evm-utils": "^2.14.3",
     "@mui/icons-material": "^5.6.2",
+    "@mui/lab": "^5.0.0-alpha.122",
     "@mui/material": "^5.6.4",
     "axios": "^0.27.2",
+    "ethers": "^6.1.0",
     "luxon": "^2.3.2",
     "moralis": "^2.14.3",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
+    "react-hook-form": "^7.43.5",
     "react-icons": "^4.8.0"
   },
   "devDependencies": {

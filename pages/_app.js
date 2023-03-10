@@ -1,24 +1,57 @@
 import '../styles/globals.scss'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
 
-const darkTheme = createTheme({
+import {
+	createTheme,
+	CssBaseline,
+	responsiveFontSizes,
+	ThemeProvider,
+} from '@mui/material'
+
+let theme = createTheme({
+	typography: {
+		fontFamily: ['poppins', 'allVariants'].join(','),
+		h3: { fontWeight: 600 },
+		h4: { fontWeight: 200 },
+	},
+
 	palette: {
 		mode: 'dark',
+		background: {
+			default: '#16141F',
+		},
 		primary: {
-			main: '#772a54',
+			light: '#d45b07',
+			main: '#FF715B',
+			dark: '#BB4D3C',
+			contrastText: '#fff',
 		},
 		secondary: {
-			main: '#d79162',
+			light: '#0c8b7c',
+			main: '#09655a',
+			dark: '#0c8b7c',
+			contrastText: '#fff',
+		},
+		white: {
+			light: '#efefef',
+			main: '#fff',
+			dark: '#efefef',
+			contrastText: '#09655a',
+		},
+		error: {
+			main: '#ff978f',
 		},
 	},
 })
 
-function MyApp({ Component, pageProps }) {
+theme = responsiveFontSizes(theme)
+
+export default function App({ Component, pageProps }) {
 	return (
-		<ThemeProvider theme={darkTheme}>
-			<Component {...pageProps} />
-		</ThemeProvider>
+		<>
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<Component {...pageProps} />
+			</ThemeProvider>
+		</>
 	)
 }
-
-export default MyApp

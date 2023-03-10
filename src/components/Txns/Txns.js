@@ -4,13 +4,13 @@ import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined'
 import RemoveCircleOutlinedIcon from '@mui/icons-material/RemoveCircleOutlined'
 
 import { DateTime } from 'luxon'
-import { Button } from '@mui/material'
+import { Button, TableCell, TableRow } from '@mui/material'
 import styles from './txns.module.scss'
 import LinkIcon from '@mui/icons-material/Link'
 
 const Txns = ({ obj, divisor }) => {
 	const theme = useTheme()
-	const matches = useMediaQuery(theme.breakpoints.up('sm'))
+	const matches = useMediaQuery(theme.breakpoints.up('md'))
 
 	const NUMBER_CLASS = [styles.number]
 	const ICON =
@@ -29,7 +29,7 @@ const Txns = ({ obj, divisor }) => {
 	if (obj.type === 'out') {
 		NUMBER_CLASS.push(styles.out)
 	}
-	console.log(NUMBER_CLASS.join(','))
+
 	const myDateTime = DateTime.fromSeconds(parseInt(obj.timestamp))
 	const DATE = matches
 		? myDateTime.toLocaleString({
@@ -43,27 +43,26 @@ const Txns = ({ obj, divisor }) => {
 				year: '2-digit',
 		  })
 	return (
-		<>
-			<div className={styles.date}>{DATE}</div>
-			<div className={NUMBER_CLASS.join(' ')}>
+		<TableRow>
+			<TableCell>{DATE}</TableCell>
+			<TableCell className={NUMBER_CLASS.join(' ')}>
 				{ICON}
 				{(obj.amount / divisor).toLocaleString()}
-			</div>
-			{matches && (
-				<div>
-					<Button
-						startIcon={<LinkIcon />}
-						size="small"
-						variant="outlined"
-						color="secondary"
-						href={`https://etherscan.io/tx/${obj.hash}`}
-						target="_blank"
-					>
-						Etherscan
-					</Button>
-				</div>
-			)}
-		</>
+			</TableCell>
+
+			<TableCell align="right">
+				<Button
+					startIcon={<LinkIcon />}
+					size="small"
+					variant="outlined"
+					color="white"
+					href={`https://etherscan.io/tx/${obj.hash}`}
+					target="_blank"
+				>
+					Etherscan
+				</Button>
+			</TableCell>
+		</TableRow>
 	)
 }
 

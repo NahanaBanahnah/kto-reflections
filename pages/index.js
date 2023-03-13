@@ -218,13 +218,13 @@ const Index = () => {
 					</Typography>
 				</Box>
 			</Modal>
-			{/* <Box className="topBar" sx={{ padding: 4 }}>
+			<Box className="topBar" sx={{ padding: 4 }}>
 				<Typography variant="body1">
 					There is a currently a bug showing certain wallets a
 					negative value. This is just a visual bug, you still have
 					your reflections!
 				</Typography>
-			</Box> */}
+			</Box>
 			<Container fixed>
 				<Stack mt={4} spacing={2}>
 					<Box display="flex" justifyContent="center">

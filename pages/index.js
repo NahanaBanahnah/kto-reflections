@@ -117,7 +117,7 @@ const Index = () => {
 			let filterIndex = txs.findIndex(row => row.hash === item.hash)
 			if (filterIndex > 0) {
 				if (txs[filterIndex].amount < amount) {
-					let original = (txs[filterIndex].amount * 100) / 7
+					let original = (amount * 100) / 90
 					let reflectTax = original - txs[filterIndex].amount - amount
 					let txObject = {
 						timestamp: item.timeStamp,

@@ -34,19 +34,23 @@ import {
 import { Box, Container, Stack } from '@mui/system'
 import InfoIcon from '@mui/icons-material/Info'
 import CloseIcon from '@mui/icons-material/Close'
+import { CloudflareProvider, ethers } from 'ethers'
 
 const Index = () => {
 	const DIVISOR = 1000000000
 
 	const [address, setAddress] = useState(null)
 	const [loading, setLoading] = useState(false)
-	// const [error, setError] = useState(false)
 	const [balance, setBalance] = useState(false)
 	const [ins, setIns] = useState(false)
 	const [outs, setOuts] = useState(false)
 	const [reflections, setReflections] = useState(false)
 	const [TXS, setTxs] = useState(null)
 	const [open, setOpen] = useState(false)
+	const provider = new CloudflareProvider()
+
+	const ensReg =
+		/^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
 
 	const {
 		handleSubmit,
@@ -63,10 +67,26 @@ const Index = () => {
 	const onSubmit = async ({ wallet }) => {
 		// ========== reset states on submit
 		setLoading(true)
-		// setError(false)
 		setBalance('')
 		setReflections('')
 		setTxs(null)
+		let address = wallet
+
+		const ensTest = wallet.match(ensReg)
+
+		if (ensTest) {
+			const ensAddress = await provider.resolveName(wallet)
+
+			if (!ensAddress) {
+				setLoading(false)
+				setError('wallet', {
+					message: 'ENS Name Not Found',
+				})
+				return false
+				return false
+			}
+			address = ensAddress
+		}
 
 		// ========== pull the wallets total token balance
 		const BALANCE = await axios.get('https://api.etherscan.io/api', {
@@ -74,7 +94,7 @@ const Index = () => {
 				module: 'account',
 				action: 'tokenBalance',
 				contractaddress: process.env.NEXT_PUBLIC_CONTRACT,
-				address: wallet,
+				address: address,
 				tag: 'latest',
 				apiKey: process.env.NEXT_PUBLIC_API,
 			},
@@ -93,7 +113,7 @@ const Index = () => {
 				module: 'account',
 				action: 'tokentx',
 				contractaddress: process.env.NEXT_PUBLIC_CONTRACT,
-				address: wallet,
+				address: address,
 				apikey: process.env.NEXT_PUBLIC_API,
 			},
 		})
@@ -104,7 +124,7 @@ const Index = () => {
 		let txs = []
 
 		TXNS.data.result.forEach(item => {
-			let type = wallet.toLowerCase() === item.to ? 'in' : 'out'
+			let type = address.toLowerCase() === item.to ? 'in' : 'out'
 			let amount = parseInt(item.value)
 
 			let obj = {
@@ -247,6 +267,10 @@ const Index = () => {
 								Information is pulled from Etherscan and is not
 								stored or saved.
 							</li>
+							<li>
+								Please note this tool only works for Defi ETH
+								wallets; and will not work for BitMart accounts.
+							</li>
 						</ol>
 					</div>
 					<Controller
@@ -254,7 +278,7 @@ const Index = () => {
 						rules={{
 							required: 'Wallet Address Is Required',
 							pattern: {
-								value: /^0x[a-fA-F0-9]{40}$/g,
+								value: /^0x[a-fA-F0-9]{40}$/g | ensReg,
 								message:
 									'Please Enter A Valid ERC-20 Wallet Address',
 							},
@@ -272,7 +296,7 @@ const Index = () => {
 								label={
 									error
 										? error.message
-										: 'ERC-20 Wallet Address'
+										: 'ERC-20 Wallet Address or ENS Name'
 								}
 								fullWidth
 								color="white"

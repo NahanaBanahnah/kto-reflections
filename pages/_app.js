@@ -7,9 +7,11 @@ import {
 	ThemeProvider,
 } from '@mui/material'
 
+import { StyledEngineProvider } from '@mui/material/styles'
+
 let theme = createTheme({
 	typography: {
-		fontFamily: ['poppins', 'allVariants'].join(','),
+		fontFamily: ['poppins', 'sans-serif'].join(','),
 		h3: { fontWeight: 600 },
 		h4: { fontWeight: 200 },
 	},
@@ -48,10 +50,12 @@ theme = responsiveFontSizes(theme)
 export default function App({ Component, pageProps }) {
 	return (
 		<>
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
-				<Component {...pageProps} />
-			</ThemeProvider>
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					<Component {...pageProps} />
+				</ThemeProvider>
+			</StyledEngineProvider>
 		</>
 	)
 }

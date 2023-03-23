@@ -38,6 +38,7 @@ import styles from '@/styles/index.module.scss'
 import TaxModal from '@/common/components/TaxModal/TaxModal'
 import IntRow from '@/common/components/IntRow/IntRow'
 import { useRouter } from 'next/router'
+import axios from 'axios'
 
 const Reflections = () => {
 	const DIVISOR = 1000000000
@@ -49,6 +50,7 @@ const Reflections = () => {
 	const [reflections, setReflections] = useState(false)
 	const [TXS, setTxs] = useState(null)
 	const [open, setOpen] = useState(false)
+	const [currentPrice, setPrice] = useState(false)
 
 	const ensReg =
 		/^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
@@ -106,6 +108,16 @@ const Reflections = () => {
 			})
 			return false
 		}
+
+		const {
+			data: {
+				kounotori: { usd: price },
+			},
+		} = await axios.get(
+			'https://api.coingecko.com/api/v3/simple/price?ids=kounotori&vs_currencies=usd'
+		)
+
+		setPrice(price)
 
 		const { txns, totalIn, totalOut } = await getTxnsAndReflections(address)
 
@@ -221,13 +233,26 @@ const Reflections = () => {
 							sm: 'left',
 						}}
 					>
-						<IntRow label="Current Balance" int={balance} />
-						<IntRow label="Total Buys & Transfer Ins" int={ins} />
+						<IntRow
+							label="Current Balance"
+							int={balance}
+							price={currentPrice}
+						/>
+						<IntRow
+							label="Total Buys & Transfer Ins"
+							price={currentPrice}
+							int={ins}
+						/>
 						<IntRow
 							label="Total Sells & Transfer Outs"
 							int={outs}
+							price={currentPrice}
 						/>
-						<IntRow label="Reflections" int={reflections} />
+						<IntRow
+							label="Reflections"
+							int={reflections}
+							price={currentPrice}
+						/>
 					</Grid>
 
 					{TXS && (

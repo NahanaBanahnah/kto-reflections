@@ -39,8 +39,13 @@ const TaxModal = ({ open, handleClose }) => {
 					data of purchase and swap amounts.
 				</Typography>
 				<Typography sx={{ mt: 2 }}>
-					Data is pulled from Etherscan and is not stored to any
-					internal or external databases or sources.
+					Blockchain data is pulled from Etherscan and is not stored
+					to any internal or external databases or sources.
+				</Typography>
+				<Typography sx={{ mt: 2 }}>
+					Price data is pulled from Coingecko when you click "View
+					Reflections", and is rounded for easier viewing. Actual
+					prices and totals may differ slightly.
 				</Typography>
 				<Typography sx={{ mt: 2 }}>
 					This tool is created as a community project, and is not

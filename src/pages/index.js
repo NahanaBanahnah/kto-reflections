@@ -12,9 +12,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import axios from 'axios'
 import { Controller, useForm } from 'react-hook-form'
-import logo from '../public/img/storkLogo.svg'
-import Txns from '../src/components/Txns/Txns'
-import ViewSource from '../src/components/ViewSource/ViewSource'
+
+import Txns from '@/common/components/Txns/Txns'
+import ViewSource from '@/common/components/ViewSource/ViewSource'
 import styles from '../styles/index.module.scss'
 import {
 	Divider,
@@ -33,6 +33,7 @@ import { Box, Container, Stack } from '@mui/system'
 import InfoIcon from '@mui/icons-material/Info'
 import CloseIcon from '@mui/icons-material/Close'
 import { CloudflareProvider } from 'ethers'
+import logo from '../../public/img/storkLogo.svg'
 
 const Index = () => {
 	const DIVISOR = 1000000000

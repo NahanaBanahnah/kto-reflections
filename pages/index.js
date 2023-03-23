@@ -17,10 +17,8 @@ import Txns from '../src/components/Txns/Txns'
 import ViewSource from '../src/components/ViewSource/ViewSource'
 import styles from '../styles/index.module.scss'
 import {
-	AppBar,
 	Divider,
 	Grid,
-	Icon,
 	IconButton,
 	Modal,
 	Table,
@@ -34,7 +32,7 @@ import {
 import { Box, Container, Stack } from '@mui/system'
 import InfoIcon from '@mui/icons-material/Info'
 import CloseIcon from '@mui/icons-material/Close'
-import { CloudflareProvider, ethers } from 'ethers'
+import { CloudflareProvider } from 'ethers'
 
 const Index = () => {
 	const DIVISOR = 1000000000
@@ -82,7 +80,6 @@ const Index = () => {
 				setError('wallet', {
 					message: 'ENS Name Not Found',
 				})
-				return false
 				return false
 			}
 			address = ensAddress
@@ -238,13 +235,7 @@ const Index = () => {
 					</Typography>
 				</Box>
 			</Modal>
-			<Box className="topBar" sx={{ padding: 4 }}>
-				<Typography variant="body1">
-					There is a currently a bug showing certain wallets a
-					negative value. This is just a visual bug, you still have
-					your reflections!
-				</Typography>
-			</Box>
+
 			<Container fixed>
 				<Stack mt={4} spacing={2}>
 					<Box display="flex" justifyContent="center">

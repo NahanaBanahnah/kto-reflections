@@ -4,6 +4,8 @@ import {
 	getWalletAddress,
 } from '@/common/utils/func'
 
+/** Endpoint */
+
 export default async function handler(req, res) {
 	const { wallet, api } = req.query
 	/** ===== needs an API Key and a wallet */

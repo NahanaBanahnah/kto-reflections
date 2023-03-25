@@ -51,6 +51,10 @@ const TaxModal = ({ open, handleClose }) => {
 					This tool is created as a community project, and is not
 					officially part of Kounotori Token.
 				</Typography>
+				<Typography sx={{ mt: 2 }}>
+					Cookies are used to analyze website traffic and optimize
+					your website experience.
+				</Typography>
 			</Box>
 		</Modal>
 	)

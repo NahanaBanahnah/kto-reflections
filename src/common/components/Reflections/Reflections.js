@@ -109,15 +109,15 @@ const Reflections = () => {
 			return false
 		}
 
-		const {
-			data: {
-				kounotori: { usd: price },
-			},
-		} = await axios.get(
-			'https://api.coingecko.com/api/v3/simple/price?ids=kounotori&vs_currencies=usd'
-		)
+		// const {
+		// 	data: {
+		// 		kounotori: { usd: price },
+		// 	},
+		// } = await axios.get(
+		// 	'https://api.coingecko.com/api/v3/simple/price?ids=kounotori&vs_currencies=usd'
+		// )
 
-		setPrice(price)
+		// setPrice(price)
 
 		const { txns, totalIn, totalOut } = await getTxnsAndReflections(address)
 
